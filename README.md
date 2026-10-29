@@ -75,6 +75,20 @@ gradlew.bat :app:installDebug      # Windows cmd
 
 ---
 
+## 看看长什么样
+
+<p align="center">
+  <img src="dsh-mobile/design/screenshots/01-sessions.png" width="240" alt="会话列表">
+  <img src="dsh-mobile/design/screenshots/02-chat.png" width="240" alt="聊天">
+  <img src="dsh-mobile/design/screenshots/03-files.png" width="240" alt="文件管理器">
+</p>
+<p align="center">
+  <img src="dsh-mobile/design/screenshots/04-settings.png" width="240" alt="设置">
+  <img src="dsh-mobile/design/screenshots/05-models.png" width="240" alt="模型选择">
+</p>
+
+> 设置页那张把中转地址涂掉了，其余都是直接截的。
+
 ## ✨ 核心特性
 
 ### 📱 匠心打磨的原生界面
