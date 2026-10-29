@@ -42,16 +42,15 @@ DSH 桌面版跑一个本地 Web 服务，端口每次启动随机。手机浏�
 
 需要 DSH 桌面版已经在跑，电脑上有 Node.js（18+）。
 
-```bash
-# 从本仓库
-cd relay
-node dsh-relay.mjs
+中转由 `dsh-relay-plugin` 随 DSH 一起启动，**不用手动跑**（手动再起一份会撞端口）：
 
-# 或者直接双击
-start-relay.cmd
+```
+dsh plugin --profile desktop add link:<本仓库绝对路径>/dsh-relay-plugin
 ```
 
-看到这样的输出就成了：
+装好后在 DSH 的插件页打开「点击肥鱼 · 中转」，能看到运行状态、改监听地址和端口。
+
+中转起来后的日志长这样：
 
 ```
 [relay] 正在监听 http://0.0.0.0:8090

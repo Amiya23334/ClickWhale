@@ -33,21 +33,15 @@ DSH 桌面版只监听 `127.0.0.1`，而且没有改绑定的开关，手机在�
 **电脑端**
 
 1. 需要 Node.js 18+ 和 [DSH 桌面版](https://github.com/deepseek-ai)。
-2. 装插件（推荐）：把 `dsh-relay-plugin` 装进 DSH 的 profile，它会从自己的位置往上一级找 `dsh-mobile/relay/dsh-relay.mjs`，然后随 DSH 启动中转。
+2. 装插件：把 `dsh-relay-plugin` 装进 DSH 的 profile，它会从自己的位置往上一级找 `dsh-mobile/relay/dsh-relay.mjs`，然后随 DSH 启动中转。
 
    ```
    dsh plugin --profile desktop add link:<本仓库绝对路径>/dsh-relay-plugin
    ```
 
-   装好后 DSH 的插件页会出现「手机中转」，详情页里能改监听地址、端口、自动重启策略，也能看到访问密钥。
+   装好后 DSH 的插件页会出现「点击肥鱼 · 中转」，详情页里能改监听地址、端口、自动重启策略，也能看到访问密钥。
 
-3. 也可以直接跑中转，不装插件：
-
-   ```
-   node dsh-mobile/relay/dsh-relay.mjs --host 0.0.0.0
-   ```
-
-   它会打印手机该填的地址，以及首次生成时打印一次访问密钥。
+   > 中转只随插件启动。不建议手动 `node` 起一份——DSH 和插件两层生命周期都管着它的端口，多起一个只会撞 `EADDRINUSE`，然后出现「端口有人在听但界面显示已停止」。
 
 **手机端**
 
