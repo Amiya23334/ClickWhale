@@ -33,21 +33,28 @@ DSH 桌面版默认只监听 `127.0.0.1`（回环地址），手机在局域网�
 
 > **前置要求**：需要 Node.js 18+ 以及 [DSH 桌面版](https://github.com/deepseek-ai)。
 
-1. **安装并启用中转插件**
+1. **拿到仓库**
 
-   双击运行仓库中的 `dsh-relay-plugin/install.cmd` —— **推荐用这个**。
+   ```bash
+   git clone https://github.com/Amiya23334/TEST.git %USERPROFILE%\dsh-mobile
+   ```
+
+   （bash / PowerShell 里把 `%USERPROFILE%` 换成 `$HOME`）
+
+2. **安装并启用中转插件**
+
+   双击 `%USERPROFILE%\dsh-mobile\dsh-relay-plugin\install.cmd` —— **推荐用这个**。
 
    或者手动两步（漏一步插件都不会加载）：
    ```bash
-   # ① 加依赖
-   dsh plugin --profile desktop add link:D:\DeepSeek-Harness\dsh-open\dsh-relay-plugin
-   :: 路径换成你自己的仓库位置（Windows 路径用反斜杠即可）
-   # ② 再把插件名写进 profile 的 package.json：
+   # 1) 加依赖
+   dsh plugin --profile desktop add link:%USERPROFILE%\dsh-mobile\dsh-relay-plugin
+   # 2) 再把插件名写进 profile 的 package.json：
    #    "dsh": { "profile": { "bundles": [ ..., "dsh-relay-plugin" ] } }
    ```
 
-   > 为什么不能只跑第 ① 步：`dsh plugin` 只是把参数转发给 pnpm，只加 dependency。而 DSH 决定加载哪些 bundle 看的是 `dsh.profile.bundles`，不在那个数组里的话包装了也不会加载。`install.cmd` 就是替你补上这一步。
-2. **确认启用**：
+   > 为什么不能只跑第 1 步：`dsh plugin` 只是把参数转发给 pnpm，只加 dependency。而 DSH 决定加载哪些 bundle 看的是 `dsh.profile.bundles`，不在那个数组里的话包装了也不会加载。`install.cmd` 就是替你补上这一步。
+3. **确认启用**：
    打开 DSH 的「插件页」，此时会出现「点击肥鱼 · 中转」插件。在详情页中，你可以修改监听地址、端口、自动重启策略，并查看自动生成的**访问密钥**。
 
 ⚠️ **避坑指南**：中转服务已集成在插件中，会随 DSH 一起自动启动。**请勿手动在终端使用 `node` 启动它**。两边如果抢占 `8090` 端口，会直接触发 `EADDRINUSE` 报错，导致“端口被占用但界面显示已停止”的尴尬。
