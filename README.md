@@ -36,7 +36,7 @@ DSH 桌面版默认只监听 `127.0.0.1`（回环地址），手机在局域网�
 1. **拿到仓库**
 
    ```bash
-   git clone https://github.com/Amiya23334/TEST.git %USERPROFILE%\dsh-mobile
+   git clone https://github.com/Amiya23334/1.git %USERPROFILE%\dsh-mobile
    ```
 
    （bash / PowerShell 里把 `%USERPROFILE%` 换成 `$HOME`）
