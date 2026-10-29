@@ -45,15 +45,10 @@ DSH 桌面版默认只监听 `127.0.0.1`（回环地址），手机在局域网�
 
    双击 `%USERPROFILE%\dsh-mobile\dsh-relay-plugin\install.cmd` —— **推荐用这个**。
 
-   或者手动两步（漏一步插件都不会加载）：
-   ```bash
-   # 1) 加依赖
-   dsh plugin --profile desktop add link:%USERPROFILE%\dsh-mobile\dsh-relay-plugin
-   # 2) 再把插件名写进 profile 的 package.json：
-   #    "dsh": { "profile": { "bundles": [ ..., "dsh-relay-plugin" ] } }
-   ```
+   它做两件事：把依赖写进 profile 的 `package.json`，再把插件名加进 `dsh.profile.bundles`。
+   只加依赖是不行的——DSH 加载哪些 bundle 看的是后者，`dsh plugin add` 那条命令只做前半步。
+   脚本跑完会提示重启 DSH。
 
-   > 为什么不能只跑第 1 步：`dsh plugin` 只是把参数转发给 pnpm，只加 dependency。而 DSH 决定加载哪些 bundle 看的是 `dsh.profile.bundles`，不在那个数组里的话包装了也不会加载。`install.cmd` 就是替你补上这一步。
 3. **确认启用**：
    打开 DSH 的「插件页」，此时会出现「点击肥鱼 · 中转」插件。在详情页中，你可以修改监听地址、端口、自动重启策略，并查看自动生成的**访问密钥**。
 

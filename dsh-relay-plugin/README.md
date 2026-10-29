@@ -19,16 +19,7 @@ install.cmd web        :: 装进别的 profile
 只做第 1 步是不够的——DSH 决定加载哪些 bundle 看的是 `dsh.profile.bundles`，
 不在那个数组里的话，包装了也不会加载。装完**重启 DSH** 才生效。
 
-手动装也可以，但要两步（漏第二步插件不会加载）：
-
-```
-# 1) 加依赖
-dsh plugin --profile desktop add link:%USERPROFILE%\dsh-mobile\dsh-relay-plugin
-# 2) 把名字写进 profile 的 package.json：
-#    dsh.profile.bundles = [ ..., "dsh-relay-plugin" ]
-```
-
-实测过：只跑第 1 步的话 dependencies 里有它、bundles 里没有，插件页不会出现。
+如果 `install.cmd` 报错，按它的提示处理；它失败通常是因为 Node.js 不在 PATH 里。
 
 ## 它做什么
 
