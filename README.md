@@ -40,7 +40,8 @@ DSH 桌面版默认只监听 `127.0.0.1`（回环地址），手机在局域网�
    或者手动两步（漏一步插件都不会加载）：
    ```bash
    # ① 加依赖
-   dsh plugin --profile desktop add link:<本仓库的绝对路径>/dsh-relay-plugin
+   dsh plugin --profile desktop add link:D:\DeepSeek-Harness\dsh-open\dsh-relay-plugin
+   :: 路径换成你自己的仓库位置（Windows 路径用反斜杠即可）
    # ② 再把插件名写进 profile 的 package.json：
    #    "dsh": { "profile": { "bundles": [ ..., "dsh-relay-plugin" ] } }
    ```

@@ -23,7 +23,7 @@ install.cmd web        :: 装进别的 profile
 
 ```
 # 1) 加依赖
-dsh plugin --profile desktop add link:<本目录绝对路径>
+dsh plugin --profile desktop add link:D:\DeepSeek-Harness\dsh-open\dsh-relay-plugin
 # 2) 把名字写进 profile 的 package.json：
 #    dsh.profile.bundles = [ ..., "dsh-relay-plugin" ]
 ```
