@@ -1,6 +1,6 @@
 {
   "name": "dsh-relay-plugin",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "让手机连上这台电脑的 DSH：跟着 DSH 启动中转，挂了自动重启，配置在插件详情页里改",
   "type": "module",
   "main": "lib/index.js",
@@ -16,7 +16,9 @@
     "locale",
     "relay.patch.yml",
     "README.md",
-    "icon.png"
+    "icon.png",
+    "install.mjs",
+    "install.cmd"
   ],
   "license": "MIT",
   "dsh": {
