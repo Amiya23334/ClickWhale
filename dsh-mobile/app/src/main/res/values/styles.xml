@@ -6,5 +6,6 @@
         <item name="android:windowBackground">#151517</item>
     </style>
 
-    <string name="app_name">DSH</string>
+    <!-- 桌面上的显示名。Manifest 里引用 @string/app_name，改名字只动这一处 -->
+    <string name="app_name">点击肥鱼</string>
 </resources>
