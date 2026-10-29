@@ -1,6 +1,6 @@
 {
   "meta": {
-    "title": "手机中转",
-    "description": "跟着 DSH 一起启动中转（dsh-mobile/relay），手机 App 才能连进来；进程挂掉会自动重启，地址/端口/密钥都可配。"
+    "title": "点击肥鱼 · 中转",
+    "description": "让手机连上这台电脑的 DSH：跟着 DSH 一起启动中转（dsh-mobile/relay），进程挂掉会自动重启。监听地址、端口、访问密钥都能在这里改。"
   }
 }

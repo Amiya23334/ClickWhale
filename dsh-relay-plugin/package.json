@@ -1,22 +1,22 @@
 {
   "name": "dsh-relay-plugin",
-  "version": "0.4.3",
-  "description": "跟着 DSH 一起启动中转（dsh-mobile/relay），挂了自动重启；插件详情页里有配置区",
+  "version": "0.5.0",
+  "description": "让手机连上这台电脑的 DSH：跟着 DSH 启动中转，挂了自动重启，配置在插件详情页里改",
   "type": "module",
   "main": "lib/index.js",
   "exports": {
     ".": "./lib/index.js",
     "./client": "./client.js",
     "./locale/*.json": "./locale/*.json",
-    "./icon": "./icon.svg"
+    "./icon": "./icon.png"
   },
   "files": [
     "lib",
     "client.js",
     "locale",
-    "icon.svg",
     "relay.patch.yml",
-    "README.md"
+    "README.md",
+    "icon.png"
   ],
   "license": "MIT",
   "dsh": {
