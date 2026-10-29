@@ -21,6 +21,32 @@ DSH 桌面版只监听 `127.0.0.1`，手机本来就连不进去。就算解决�
 | 会话 | 另开一份 | 与电脑同一个会话 |
 | 长列表 | 滚动发涩 | 原生 `LazyColumn`，带转场 |
 
+## 快速开始
+
+**电脑端**
+
+1. 需要 Node.js 18+ 和 [DSH 桌面版](https://github.com/deepseek-ai)。
+2. 装插件：双击 `dsh-relay-plugin/install.cmd`，或者
+
+   ```
+   dsh plugin --profile desktop add link:<本仓库绝对路径>/dsh-relay-plugin
+   ```
+
+   装好后 DSH 的插件页会出现「点击肥鱼 · 中转」，详情页里能改监听地址、端口、自动重启策略，也能看到访问密钥。
+
+   > 中转只随插件启动。别手动 `node` 再起一份——两边都管着 8090，多起的那个只会撞 `EADDRINUSE`，然后出现「端口有人在听但界面显示已停止」。
+
+**手机端**
+
+用 Android Studio 打开 `dsh-mobile/` 构建安装，或者：
+
+```
+cd dsh-mobile
+./gradlew :app:installDebug
+```
+
+打开 App，在「连接」页填上电脑地址（中转启动时会打印，形如 `http://192.168.1.100:8090`）和访问密钥。
+
 ## 界面
 
 这块是刻意做过的，不是套个主题了事。
@@ -71,32 +97,6 @@ DSH 桌面版只监听 `127.0.0.1`，手机本来就连不进去。就算解决�
 | `dsh-mobile/` | 安卓 App（Kotlin + Compose） |
 | `dsh-mobile/relay/` | 中转，唯一的实现 |
 | `dsh-relay-plugin/` | DSH 插件：让中转跟着 DSH 起、挂了自动重启，配置在插件详情页里改 |
-
-## 快速开始
-
-**电脑端**
-
-1. 需要 Node.js 18+ 和 [DSH 桌面版](https://github.com/deepseek-ai)。
-2. 装插件：双击 `dsh-relay-plugin/install.cmd`，或者
-
-   ```
-   dsh plugin --profile desktop add link:<本仓库绝对路径>/dsh-relay-plugin
-   ```
-
-   装好后 DSH 的插件页会出现「点击肥鱼 · 中转」，详情页里能改监听地址、端口、自动重启策略，也能看到访问密钥。
-
-   > 中转只随插件启动。别手动 `node` 再起一份——两边都管着 8090，多起的那个只会撞 `EADDRINUSE`，然后出现「端口有人在听但界面显示已停止」。
-
-**手机端**
-
-用 Android Studio 打开 `dsh-mobile/` 构建安装，或者：
-
-```
-cd dsh-mobile
-./gradlew :app:installDebug
-```
-
-打开 App，在「连接」页填上电脑地址（中转启动时会打印，形如 `http://192.168.1.100:8090`）和访问密钥。
 
 ## 已知限制
 
