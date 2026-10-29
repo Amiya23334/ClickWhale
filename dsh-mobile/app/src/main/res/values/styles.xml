@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.DshMobile" parent="android:Theme.Material.NoActionBar">
+        <item name="android:statusBarColor">#151517</item>
+        <item name="android:navigationBarColor">#151517</item>
+        <item name="android:windowBackground">#151517</item>
+    </style>
+
+    <string name="app_name">DSH</string>
+</resources>

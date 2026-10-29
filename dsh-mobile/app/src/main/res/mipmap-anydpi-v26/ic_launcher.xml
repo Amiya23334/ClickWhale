@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- monochrome 层去掉了：那是给「主题图标」用的单色剪影，拿彩色立绘去当
+     单色层会被系统按亮度硬转，糊成一团。宁可让主题图标回退到普通图标。 -->
+<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
+    <background android:drawable="@color/icon_bg" />
+    <foreground android:drawable="@mipmap/ic_launcher_foreground" />
+</adaptive-icon>

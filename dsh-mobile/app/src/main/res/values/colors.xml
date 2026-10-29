@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 自适应图标背景层：跟素材自身背景同一个浅蓝（#EBF3FD），
+         前端 foreground 缩到 72% 后四角也是这个色，圆遮罩下看不出接缝。 -->
+    <color name="icon_bg">#EBF3FD</color>
+</resources>

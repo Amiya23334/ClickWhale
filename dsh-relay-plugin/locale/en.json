@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Mobile Relay",
+    "description": "Starts the relay that lets the dsh-mobile app connect to this desktop, alongside DSH itself; restarts it automatically if it dies. Path, port and key file are configurable."
+  }
+}

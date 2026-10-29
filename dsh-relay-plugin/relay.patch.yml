@@ -1,0 +1,11 @@
+# 把中转挂到 DSH 生命周期上：DSH 起来就跑，挂了 5 秒后自动重启。
+#
+# 这里**不写 relayPath**：插件会从自己的位置往上一级找 dsh-mobile/relay/dsh-relay.mjs。
+# 写死绝对路径的后果是别人 clone 下来一跑就找不到脚本；而且中转只有一份实现，
+# 别再往这里放副本（曾经 tools/relay 和 dsh-mobile/relay 各存一份，结果是
+# 「改的是新的、跑的是旧的」，文件管理器和上传整个失效）。
+- insert:
+    - id: dsh-relay
+      name: dsh-relay-plugin
+      config:
+        host: 0.0.0.0

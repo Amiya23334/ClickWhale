@@ -1,0 +1,23 @@
+# Gradle 构建产物，不进仓库（每次构建都能重新生成）
+build/
+.gradle/
+local.properties
+*.apk
+*.aab
+
+# Studio 的本地索引
+.idea/
+*.iml
+.kotlin/
+
+# 签名密钥绝不进仓库
+*.jks
+*.keystore
+keystore.properties
+
+# relay 日志
+*.log
+
+# 系统垃圾
+.DS_Store
+Thumbs.db

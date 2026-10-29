@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <!-- Android 16 起访问局域网必须显式申请，否则 WebView 报 ERR_LOCAL_NETWORK_PERMISSION_MISSING -->
+    <uses-permission android:name="android.permission.ACCESS_LOCAL_NETWORK" />
+    <!-- Android 13(API 33)+ 弹通知需要运行时权限，不申请则 notify 静默无效 -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <!-- 保活服务用 specialUse 类型（不受 dataSync 的 6 小时/24 小时限制） -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:label="DSH"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.DshMobile"
+        android:usesCleartextTraffic="true">
+
+        <!--
+            启动入口是原生界面（ChatActivity）。以前是 MainActivity 那个 WebView
+            投屏壳当首屏，进来还得点小鲸鱼才到原生 UI——多一层且没必要。
+            WebView 现在只剩「插件页」这一个用途，从原生界面的顶栏点进去。
+        -->
+        <activity
+            android:name=".ChatActivity"
+            android:exported="true"
+            android:label="DSH"
+            android:configChanges="orientation|screenSize|keyboardHidden|screenLayout"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".MainActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden|screenLayout"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:label="插件"
+            android:windowSoftInputMode="adjustResize"></activity>
+
+        <activity
+            android:name=".FileBrowserActivity"
+            android:exported="false"
+            android:label="电脑文件"
+            android:configChanges="orientation|screenSize|keyboardHidden|screenLayout" />
+
+        <!--
+            保活服务：App 切后台后进程会被降级成 cached（oom_score_adj 跳到 700+），
+            系统随即掐断 WebSocket，收不到 turn/end 事件。前台服务能把进程按住。
+            specialUse 不受 dataSync「6 小时 / 24 小时」限制；property 里的说明
+            是 Google Play 审核要看的东西，本地侧载不影响。
+        -->
+        <service
+            android:name=".KeepAliveService"
+            android:exported="false"
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="保持与同一局域网内自建中转的 WebSocket 长连接，接收 agent 回合结束与审批事件" />
+        </service>
+    </application>
+
+</manifest>
