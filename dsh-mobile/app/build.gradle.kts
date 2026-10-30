@@ -18,6 +18,11 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
+            // 个人项目，release 复用 debug 签名：
+            // ① 用户之前装的就是 debug 版，签名一致才能覆盖更新，否则得先卸载
+            // ② 正式 keystore 不进仓库（.gitignore 挡着），换机器就构建不出来
+            // 以后要上架或分发给别人时，再换成正式签名。
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
 
