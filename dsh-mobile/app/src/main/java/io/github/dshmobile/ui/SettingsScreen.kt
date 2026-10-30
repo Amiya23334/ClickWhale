@@ -65,7 +65,9 @@ fun SettingsScreen(
     onFontChange: (FontPreset) -> Unit,
     appName: String,
     versionName: String,
+    authorName: String,
     onOpenRepo: () -> Unit,
+    onOpenAuthor: () -> Unit,
     backgroundUri: String,
     onPickBackground: () -> Unit,
     onClearBackground: () -> Unit,
@@ -196,12 +198,12 @@ fun SettingsScreen(
                 FontPreset.entries.forEachIndexed { index, preset ->
                     Box(modifier = Modifier.padding(start = if (index == 0) 0.dp else 5.dp)) {
                         ThemeChip(preset.label, selected = preset == font) {
-                            if (preset == FontPreset.CUSTOM) {
-                                // 点「自定义」永远去开文件选择器。
-                                // 以前只有「从没选过」才开，选过之后就变成纯切档位——
-                                // 结果用户想换一个字体文件时点它没反应，以为坏了。
+                            if (preset == FontPreset.CUSTOM && customFontName.isBlank()) {
+                                // 从没选过字体文件：开选择器选一个
                                 onPickFont()
                             } else {
+                                // 有文件（或切到其他档位）：正常切档。
+                                // 想换文件走下面的「更换」，两个入口各管各的。
                                 onFontChange(preset)
                             }
                         }
@@ -385,7 +387,9 @@ fun SettingsScreen(
             AboutCard(
                 appName = appName,
                 versionName = versionName,
+                authorName = authorName,
                 onOpenRepo = onOpenRepo,
+                onOpenAuthor = onOpenAuthor,
             )
         }
 
@@ -428,7 +432,9 @@ fun SettingsScreen(
 private fun AboutCard(
     appName: String,
     versionName: String,
+    authorName: String,
     onOpenRepo: () -> Unit,
+    onOpenAuthor: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -479,6 +485,21 @@ private fun AboutCard(
         )
 
         Spacer(modifier = Modifier.height(10.dp))
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                text = "作者 ",
+                color = Palette.TextTertiary,
+                fontSize = Dims.metaSize,
+            )
+            Text(
+                text = authorName,
+                color = Palette.Accent,
+                fontSize = Dims.metaSize,
+                modifier = Modifier.clickable(onClick = onOpenAuthor),
+            )
+        }
+
+        Spacer(modifier = Modifier.height(6.dp))
         Text(
             text = "吉祥物「肥鱼」形象由作者绘制",
             color = Palette.TextTertiary,

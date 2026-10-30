@@ -181,7 +181,7 @@ private fun PluginRow(p: ApiClient.PluginInfo) {
 }
 
 /**
- * 版本号太长会把名字挤掉：`link:C:/Users/.../dsh-glass-skin` 这种直接截成 `link`，
+ * 版本号太长会把名字挤掉：`link:<本地路径>` 这种直接截成 `link`，
  * `github:owner/repo#<40位 sha>` 截成 `#<前 7 位>`，普通 semver 原样显示。
  */
 private fun shortVersion(v: String): String = when {

@@ -391,6 +391,23 @@ class ChatActivity : ComponentActivity() {
      * 而且相册/文件管理器给的 URI 权限随时可能失效。复制一份几百 KB 的副本最稳。
      */
     private fun installCustomFont(uri: android.net.Uri, displayName: String) {
+        // 魔数校验：ttf 是 00 01 00 00，otf 是 'OTTO'。有些文件管理器不管 MIME
+        // 乱给类型，选择器放行了垃圾文件也会在这里被拦下。
+        val head = ByteArray(4)
+        runCatching {
+            contentResolver.openInputStream(uri)?.use { it.read(head) }
+        }.onFailure {
+            error = "读不到所选文件"
+            return
+        }
+        val isTtf = head[0] == 0.toByte() && head[1] == 1.toByte() && head[2] == 0.toByte() && head[3] == 0.toByte()
+        val isOtf = head[0] == 'O'.code.toByte() && head[1] == 'T'.code.toByte() &&
+            head[2] == 'T'.code.toByte() && head[3] == 'O'.code.toByte()
+        if (!isTtf && !isOtf) {
+            error = "这不是字体文件（只支持 ttf / otf）"
+            return
+        }
+
         val dir = java.io.File(filesDir, "fonts").apply { mkdirs() }
         val dest = java.io.File(dir, "custom_font")
         val ok = runCatching {
@@ -484,13 +501,12 @@ class ChatActivity : ComponentActivity() {
         }.getOrDefault("unknown")
 
     /** 打开开源仓库地址。 */
-    private fun openRepo() {
+    private fun openRepo() = openUrl(REPO_URL)
+
+    private fun openUrl(url: String) {
         runCatching {
             startActivity(
-                android.content.Intent(
-                    android.content.Intent.ACTION_VIEW,
-                    android.net.Uri.parse(REPO_URL)
-                )
+                android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse(url))
             )
         }
     }
@@ -706,11 +722,14 @@ class ChatActivity : ComponentActivity() {
         // 背景图选择。选完必须把读权限持久化——否则进程重启后
         // 这个 content:// URI 就再也打不开了（图直接消失，还不报错）。
         // 选字体文件。复制到私有目录，见 installCustomFont 的注释。
+        // 只收 ttf/otf。以前是 "*/*" 全放开，选个图片进去 Font(File) 解析失败
+        // 就静默退回系统字体，用户看起来就是「选了没效果」。
         val pickFont = rememberLauncherForActivityResult(
             ActivityResultContracts.OpenDocument()
         ) { uri ->
             if (uri != null) {
-                val name = uri.lastPathSegment?.substringAfterLast('/') ?: "自定义字体"
+                val name = (uri.lastPathSegment?.substringAfterLast('/') ?: "自定义字体")
+                    .substringBeforeLast('.')
                 installCustomFont(uri, name)
             }
         }
@@ -812,7 +831,9 @@ class ChatActivity : ComponentActivity() {
                         onFontChange = { setFont(it) },
                         appName = appName(),
                         versionName = versionName(),
+                        authorName = AUTHOR_NAME,
                         onOpenRepo = { openRepo() },
+                        onOpenAuthor = { openUrl(AUTHOR_URL) },
                         backgroundUri = Palette.backgroundUri,
                         onPickBackground = { pickBackground.launch(arrayOf("image/*")) },
                         bgBlur = Palette.bgBlur,
@@ -822,7 +843,7 @@ class ChatActivity : ComponentActivity() {
                         onClearBackground = { setBackgroundUri("") },
                         onDisconnect = { disconnect() },
                         customFontName = Palette.customFontName,
-                        onPickFont = { pickFont.launch(arrayOf("*/*")) },
+                        onPickFont = { pickFont.launch(arrayOf("font/ttf", "font/otf", "application/x-font-ttf", "application/x-font-otf", "application/octet-stream")) },
                         onBack = { showSettings = false },
                     )
                     return@Box
@@ -1539,6 +1560,8 @@ class ChatActivity : ComponentActivity() {
         private const val KEY_FONT = "font"
         /** 开源仓库地址，关于页里点「开源 · MIT 协议」会跳到这里 */
         private const val REPO_URL = "https://github.com/Amiya23334/ClickWhale"
+        private const val AUTHOR_NAME = "Amiya23334"
+        private const val AUTHOR_URL = "https://space.bilibili.com/100654734"
         private const val KEY_BG_URI = "background_uri"
         private const val KEY_BG_BLUR = "background_blur"
         private const val KEY_BG_ALPHA = "background_alpha"
