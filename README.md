@@ -33,21 +33,17 @@ DSH 桌面版默认只监听 `127.0.0.1`（回环地址），手机在局域网�
 
 > **前置要求**：需要 Node.js 18+ 以及 [DSH 桌面版](https://github.com/deepseek-ai)。
 
-1. **拿到仓库**
+1. **下载并解压**
 
-   ```bash
-   git clone https://github.com/Amiya23334/1.git %USERPROFILE%\dsh-mobile
-   ```
+   在页面右上角点 `Code` → `Download ZIP`，解压到任意位置。不用装 git，放哪儿都行。
 
-   （bash / PowerShell 里把 `%USERPROFILE%` 换成 `$HOME`）
+2. **安装插件**
 
-2. **安装并启用中转插件**
-
-   双击 `%USERPROFILE%\dsh-mobile\dsh-relay-plugin\install.cmd` —— **推荐用这个**。
+   双击解压出来的 `dsh-relay-plugin\install.cmd`。它会按自己的位置找路径，不用你填任何东西。
 
    它做两件事：把依赖写进 profile 的 `package.json`，再把插件名加进 `dsh.profile.bundles`。
    只加依赖是不行的——DSH 加载哪些 bundle 看的是后者，`dsh plugin add` 那条命令只做前半步。
-   脚本跑完会提示重启 DSH。
+   跑完会提示重启 DSH。
 
 3. **确认启用**：
    打开 DSH 的「插件页」，此时会出现「点击肥鱼 · 中转」插件。在详情页中，你可以修改监听地址、端口、自动重启策略，并查看自动生成的**访问密钥**。
