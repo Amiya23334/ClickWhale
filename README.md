@@ -1,4 +1,4 @@
-# 点击肥鱼 (Feiyu)
+# 点击肥鱼 
 
 > 把电脑上的 [DeepSeek Harness (DSH)](https://deepseek.com) 完整带到你的 Android 手机上。
 
