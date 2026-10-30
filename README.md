@@ -83,7 +83,7 @@ gradlew.bat :app:installDebug      # Windows cmd
   <img src="dsh-mobile/design/screenshots/05-models.png" width="240" alt="模型选择">
 </p>
 
-> 设置页那张把中转地址涂掉了，其余都是直接截的。
+> 设置页那张把中转地址涂掉了，其余都是直接截的。 （部分过时，以实际软件为准）
 
 ## ✨ 核心特性
 
