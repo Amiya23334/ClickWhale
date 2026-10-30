@@ -167,21 +167,34 @@ object Palette {
     private var cachedFontFamily: androidx.compose.ui.text.font.FontFamily =
         androidx.compose.ui.text.font.FontFamily.Default
 
-    /** 当前实际使用的字族。CUSTOM 档从这里取用户字体，取不到就退回系统。 */
-    val fontFamily: androidx.compose.ui.text.font.FontFamily
-        get() {
-            if (font != FontPreset.CUSTOM) return font.family
-            val path = customFontPath
-            if (path.isEmpty()) return androidx.compose.ui.text.font.FontFamily.Default
-            if (path == cachedFontPath) return cachedFontFamily
-            cachedFontFamily = runCatching {
-                androidx.compose.ui.text.font.FontFamily(
-                    androidx.compose.ui.text.font.Font(java.io.File(path))
-                )
-            }.getOrDefault(androidx.compose.ui.text.font.FontFamily.Default)
-            cachedFontPath = path
-            return cachedFontFamily
-        }
+    /**
+     * 当前实际使用的字族。
+     *
+     * 必须是 MutableState：以前这里是普通 getter，`setFont()` 改了 `font` 之后
+     * 读它的 CompositionLocalProvider 不会重组，切字体看着就没反应（只在启动时算了一次）。
+     * CUSTOM 档现算用户字体，解析失败退回系统字体。
+     */
+    var fontFamily by mutableStateOf(resolveFontFamily())
+        private set
+
+    /** 档位或字体文件变了之后调用，重算并把新值发布出去。 */
+    fun refreshFontFamily() {
+        fontFamily = resolveFontFamily()
+    }
+
+    private fun resolveFontFamily(): androidx.compose.ui.text.font.FontFamily {
+        if (font != FontPreset.CUSTOM) return font.family
+        val path = customFontPath
+        if (path.isEmpty()) return androidx.compose.ui.text.font.FontFamily.Default
+        if (path == cachedFontPath) return cachedFontFamily
+        cachedFontFamily = runCatching {
+            androidx.compose.ui.text.font.FontFamily(
+                androidx.compose.ui.text.font.Font(java.io.File(path))
+            )
+        }.getOrDefault(androidx.compose.ui.text.font.FontFamily.Default)
+        cachedFontPath = path
+        return cachedFontFamily
+    }
 
     val Accent: Color get() = if (dark) accent.dark else accent.light
     /** 强调色在深/浅底上都先按夜间的值算，用于需要固定色的场合（如状态点） */

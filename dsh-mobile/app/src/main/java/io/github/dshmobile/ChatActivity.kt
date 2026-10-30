@@ -375,6 +375,8 @@ class ChatActivity : ComponentActivity() {
         RelayAuth.key = relayKey
         Palette.customFontPath = prefs.getString(KEY_FONT_FILE, "") ?: ""
         Palette.customFontName = prefs.getString(KEY_FONT_NAME, "") ?: ""
+        // 恢复完路径再算一次，否则刚启动就切到 CUSTOM 档时拿不到字体文件
+        Palette.refreshFontFamily()
         applySystemBarAppearance()
     }
 
@@ -458,8 +460,45 @@ class ChatActivity : ComponentActivity() {
             .putString(KEY_ACCENT, preset.name).apply()
     }
 
+    /** 关于页要显示的名字：直接用系统读到的应用名，别写死（改名会不同步）。 */
+    private fun appName(): String =
+        runCatching {
+            val pm = packageManager
+            val appInfo = pm.getApplicationInfo(packageName, 0)
+            pm.getApplicationLabel(appInfo).toString()
+        }.getOrDefault("点击肥鱼")
+
+    /** 版本号：用户报问题时第一句会问「你装的哪版」。 */
+    private fun versionName(): String =
+        runCatching {
+            val info = if (android.os.Build.VERSION.SDK_INT >= 33) {
+                packageManager.getPackageInfo(
+                    packageName,
+                    android.content.pm.PackageManager.PackageInfoFlags.of(0)
+                )
+            } else {
+                @Suppress("DEPRECATION")
+                packageManager.getPackageInfo(packageName, 0)
+            }
+            info.versionName ?: "unknown"
+        }.getOrDefault("unknown")
+
+    /** 打开开源仓库地址。 */
+    private fun openRepo() {
+        runCatching {
+            startActivity(
+                android.content.Intent(
+                    android.content.Intent.ACTION_VIEW,
+                    android.net.Uri.parse(REPO_URL)
+                )
+            )
+        }
+    }
+
     private fun setFont(preset: FontPreset) {
         Palette.font = preset
+        // 必须重算：fontFamily 是 State，不改它界面不会重组，切字体看着没反应
+        Palette.refreshFontFamily()
         getSharedPreferences(PREFS, MODE_PRIVATE).edit()
             .putString(KEY_FONT, preset.name).apply()
     }
@@ -771,6 +810,9 @@ class ChatActivity : ComponentActivity() {
                         onAccentChange = { setAccent(it) },
                         font = Palette.font,
                         onFontChange = { setFont(it) },
+                        appName = appName(),
+                        versionName = versionName(),
+                        onOpenRepo = { openRepo() },
                         backgroundUri = Palette.backgroundUri,
                         onPickBackground = { pickBackground.launch(arrayOf("image/*")) },
                         bgBlur = Palette.bgBlur,
@@ -1495,6 +1537,8 @@ class ChatActivity : ComponentActivity() {
         private const val KEY_THEME_MODE = "theme_mode"
         private const val KEY_ACCENT = "accent"
         private const val KEY_FONT = "font"
+        /** 开源仓库地址，关于页里点「开源 · MIT 协议」会跳到这里 */
+        private const val REPO_URL = "https://github.com/Amiya23334/ClickWhale"
         private const val KEY_BG_URI = "background_uri"
         private const val KEY_BG_BLUR = "background_blur"
         private const val KEY_BG_ALPHA = "background_alpha"

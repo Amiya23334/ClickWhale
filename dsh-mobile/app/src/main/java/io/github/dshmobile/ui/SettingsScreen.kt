@@ -37,6 +37,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
+import androidx.compose.ui.draw.clip
 
 /**
  * 设置页。
@@ -58,6 +63,9 @@ fun SettingsScreen(
     onAccentChange: (AccentPreset) -> Unit,
     font: FontPreset,
     onFontChange: (FontPreset) -> Unit,
+    appName: String,
+    versionName: String,
+    onOpenRepo: () -> Unit,
     backgroundUri: String,
     onPickBackground: () -> Unit,
     onClearBackground: () -> Unit,
@@ -188,8 +196,10 @@ fun SettingsScreen(
                 FontPreset.entries.forEachIndexed { index, preset ->
                     Box(modifier = Modifier.padding(start = if (index == 0) 0.dp else 5.dp)) {
                         ThemeChip(preset.label, selected = preset == font) {
-                            // 还没选过字体文件时点「自定义」= 先让他去选，而不是切到一个空档位
-                            if (preset == FontPreset.CUSTOM && customFontName.isBlank()) {
+                            if (preset == FontPreset.CUSTOM) {
+                                // 点「自定义」永远去开文件选择器。
+                                // 以前只有「从没选过」才开，选过之后就变成纯切档位——
+                                // 结果用户想换一个字体文件时点它没反应，以为坏了。
                                 onPickFont()
                             } else {
                                 onFontChange(preset)
@@ -200,12 +210,24 @@ fun SettingsScreen(
             }
 
             if (customFontName.isNotBlank()) {
-                Text(
-                    text = "自定义字体：$customFontName",
-                    color = Palette.TextTertiary,
-                    fontSize = Dims.metaSize,
-                    modifier = Modifier.padding(start = 4.dp, top = 2.dp),
-                )
+                Row(
+                    modifier = Modifier
+                        .padding(start = 4.dp, top = 4.dp)
+                        .clickable { onPickFont() },
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(
+                        text = "自定义字体：$customFontName",
+                        color = Palette.TextTertiary,
+                        fontSize = Dims.metaSize,
+                    )
+                    Spacer(modifier = Modifier.width(6.dp))
+                    Text(
+                        text = "更换",
+                        color = Palette.Accent,
+                        fontSize = Dims.metaSize,
+                    )
+                }
             }
 
             // 背景图：叠在底色上，所以带透明的 PNG 会透出底色。
@@ -360,13 +382,10 @@ fun SettingsScreen(
 
             SectionTitle("关于")
 
-            InfoCard(
-                label = "DSH Mobile",
-                value = "手机端连接电脑上的 DeepSeek Harness",
-            )
-            InfoCard(
-                label = "吉祥物",
-                value = "肥鱼",
+            AboutCard(
+                appName = appName,
+                versionName = versionName,
+                onOpenRepo = onOpenRepo,
             )
         }
 
@@ -397,6 +416,74 @@ fun SettingsScreen(
             containerColor = Palette.Surface,
         )
     }
+    }
+}
+
+/**
+ * 关于卡片：版本、开源地址、许可证、吉祥物署名。
+ *
+ * 以前这里只有两行静态文字，连版本号都没有——用户报 bug 时说不清自己跑的是哪版。
+ */
+@Composable
+private fun AboutCard(
+    appName: String,
+    versionName: String,
+    onOpenRepo: () -> Unit,
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Palette.Surface, RoundedCornerShape(Dims.cardRadius))
+            .padding(horizontal = 14.dp, vertical = 14.dp),
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            // 用 App 自己的图标，一眼对得上桌面上的那个。
+            // 不能直接 painterResource(R.mipmap.ic_launcher)：API 26+ 它解析成
+            // 自适应图标 XML，painterResource 不认，进来就崩（crash 日志里那条
+            // Only VectorDrawables and rasterized asset types are supported）。
+            // 所以用复制出来的普通位图。
+            Image(
+                painter = painterResource(R.drawable.about_icon),
+                contentDescription = null,
+                modifier = Modifier
+                    .size(44.dp)
+                    .clip(RoundedCornerShape(11.dp)),
+            )
+            Spacer(modifier = Modifier.width(12.dp))
+            Column {
+                Text(text = appName, color = Palette.TextPrimary, fontSize = Dims.titleSize)
+                Spacer(modifier = Modifier.height(2.dp))
+                Text(
+                    text = "版本 $versionName",
+                    color = Palette.TextSecondary,
+                    fontSize = Dims.metaSize,
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(12.dp))
+        Text(
+            text = "把电脑上的 DeepSeek Harness 接到手机上。不是投屏，是原生客户端——"
+                + "和电脑镜像同一个会话。",
+            color = Palette.TextSecondary,
+            fontSize = 13.sp,
+            lineHeight = 19.sp,
+        )
+
+        Spacer(modifier = Modifier.height(12.dp))
+        Text(
+            text = "开源 · MIT 协议",
+            color = Palette.Accent,
+            fontSize = 13.sp,
+            modifier = Modifier.clickable(onClick = onOpenRepo),
+        )
+
+        Spacer(modifier = Modifier.height(10.dp))
+        Text(
+            text = "吉祥物「肥鱼」形象由作者绘制",
+            color = Palette.TextTertiary,
+            fontSize = Dims.metaSize,
+        )
     }
 }
 
