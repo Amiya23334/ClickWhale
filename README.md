@@ -33,9 +33,9 @@ DSH 桌面版默认只监听 `127.0.0.1`（回环地址），手机在局域网�
 
 > **前置要求**：需要 Node.js 18+ 以及 [DSH 桌面版](https://github.com/deepseek-ai)。
 
-1. **下载并解压**
+1. **下载插件**
 
-   在页面右上角点 `Code` → `Download ZIP`，解压到任意位置。不用装 git，放哪儿都行。
+   到 [Releases](/Amiya23334/ClickWhale/releases/latest) 下载 `dsh-relay-plugin.zip`，解压到任意位置。不用装 git。
 
 2. **安装插件**
 
@@ -52,7 +52,7 @@ DSH 桌面版默认只监听 `127.0.0.1`（回环地址），手机在局域网�
 
 ### 2. 手机端
 
-**直接装**：下载 [release/feiyu-1.0.apk](release/feiyu-1.0.apk)，传到手机上安装即可（需要允许「安装未知来源应用」）。
+**直接装**：到 [Releases](/Amiya23334/ClickWhale/releases/latest) 下载 `feiyu-1.0.apk`，传到手机上安装即可（需要允许「安装未知来源应用」）。
 
 **自己编译**（可选，需要 Android Studio）：
 
