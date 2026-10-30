@@ -52,7 +52,7 @@ DSH 桌面版默认只监听 `127.0.0.1`（回环地址），手机在局域网�
 
 ### 2. 手机端
 
-**直接装**：到 [Releases](/Amiya23334/ClickWhale/releases/latest) 下载 `feiyu-1.0.apk`，传到手机上安装即可（需要允许「安装未知来源应用」）。
+**直接装**：到 [Releases](/Amiya23334/ClickWhale/releases/latest) 下载最新的 `feiyu-*.apk`，传到手机上安装即可（需要允许「安装未知来源应用」）。
 
 **自己编译**（可选，需要 Android Studio）：
 
